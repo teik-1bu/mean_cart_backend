@@ -1,0 +1,89 @@
+<html>
+    
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Cart</title>
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/app.css" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>                
+        function addToCard(btn){
+            btn.parentNode.parentNode.className = "selected";
+            var id = $("tr.selected td:first" ).html();
+            
+            $.ajax({
+                dataType: 'text',
+                type: 'POST',
+                url: '/cart',
+                data: {productId:id},
+                error: function(res){
+                    btn.parentNode.parentNode.className = "";
+                },
+                success: function(res) {
+                    $("tr.selected td:nth-child(5)").attr('id','qty');
+                    // Do something with the result
+                    var json = JSON.parse(res);
+                    document.getElementById("qty").innerHTML = json[id].qty;
+                    console.log(json);
+                    $("tr.selected td:nth-child(5)").attr('id','');
+                    btn.parentNode.parentNode.className = "";
+                }
+            });
+           
+            
+        }
+        function deleteAll(){
+            $.ajax({
+                url: '/cart',
+                type: 'DELETE',
+                success: function(res) {
+                    // Do something with the result
+                }
+            });
+        }
+        
+    </script>
+</head>
+    
+<body>
+    <div class="generic-container">
+        <div class="panel-heading"><span class="lead">Cart </span></div>
+        <div class="tablecontainer">
+            <table class="table table-hover" id="table">
+                <thead>
+                        <tr>
+                        <th>No.</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th></th>
+                        <th>Quantity</th>
+                        <th></th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <% if (typeof data !== 'undefined') {%>
+                            <%for(var i=0; i < data.items.length; i++) { %>
+                                <tr>
+                                <td><%= data.items[i].id %></td>
+                                <td><%= data.items[i].name %></td>
+                                <td><%= data.items[i].price %></td>
+                                <td><button class="btn btn-success " onclick="addToCard(this)">+</button></td>
+                                <td id = ''><%= data.items[i].qty %></td>
+                                <td><button class="btn btn-danger " onclick="deleteFromCard(this)">-</button></td>
+                                <td><%= data.total %></td>
+                                </tr>
+                            <% } %>
+                        <% } %>
+                </tbody>
+            </table>
+            <button class="btn btn-danger " onclick="deleteAll()">Delete all</button>        
+            <div class="well">
+                    Go to <a href="/products/list">Products List</a>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
