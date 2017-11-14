@@ -13,7 +13,8 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-
+var cors = require('./cors');
+app.use(cors.permission);
 var db = require('./models/db'),
     dbProducts = require('./models/products');
     
