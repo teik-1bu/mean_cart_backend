@@ -15,7 +15,9 @@
                 dataType: 'text',
                 type: 'POST',
                 url: '/cart',
-                data: { productId: _id },
+                data: {
+                    productId: _id
+                },
                 error: function (res) {
                     btn.parentNode.parentNode.className = "";
                 },
@@ -62,7 +64,8 @@
                             str += '<td>' + res[i].name + '</td>';
                             str += '<td>' + res[i].description + '</td>';
                             str += '<td>' + res[i].price + '</td>';
-                            str += '<td><button class="add-to-cart btn btn-primary" onclick="addToCard(this)">Add to card</button></td></tr>';
+                            str +=
+                                '<td><button class="add-to-cart btn btn-primary" onclick="addToCard(this)">Add to card</button></td></tr>';
                         }
                         $('tbody').empty().append(str);
 
@@ -79,7 +82,7 @@
     <div class="generic-container">
         <div class="row">
             Search
-            <input type="search" name="search" id="search" onkeyup="search(this.value)"></input>
+            <input type="search" name="search" id="search" onkeyup="search(this.value)">
             <div class="panel-heading col-xs-10 col-md-11">
                 <span class="lead">List of Documents </span>
             </div>
@@ -92,15 +95,17 @@
                     </span>)</a>
             </div>
         </div>
+
         <div class="tablecontainer">
             <table class="table table-hover" id="table">
                 <thead>
                     <tr id="1">
                         <th>No.</th>
                         <th>Product Name</th>
-                        <th>Description<th>
-                        <th>Price</th>
-                        <th></th>
+                        <th>Description
+                            <th>
+                                <th>Price</th>
+                                <th></th>
                     </tr>
                 </thead>
                 <tbody>

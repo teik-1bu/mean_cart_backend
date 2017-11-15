@@ -24,16 +24,7 @@ router.post("/", function(req, res, next) {
     if (err) {
       handleError(res, err.message, "Product Creation was Unsuccesfull", 400);
     } else {
-      var allowedOrigins = ['http://127.0.0.1:4200', 'http://localhost:4200'];
-      var origin = req.headers.origin;
-      if (allowedOrigins.indexOf(origin) > -1) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-      }
-      //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
-      res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-      res.header('Access-Control-Allow-Credentials', true);
-      res.status(201).json({status:201, data: doc, message: "Successfully Created Product"});
+      res.status(201).json({code:201, data: doc, message: "Successfully Created Product"});
     }
   });
 });
@@ -100,6 +91,7 @@ router.delete("/:id", function(req, res) {
         if (err) {
           handleError(res, err.message, "Failed to delete a product.", 409);
         } else {
+          req.session.destroy();
           res.status(200).json({status:204, message: "Succesfully Todo Deleted"});
         }
       });

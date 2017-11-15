@@ -20,7 +20,7 @@ function handleError(res, reason, message, code) {
 router.post("/", function(req, res) {
   req.session.cart = req.session.cart || {};
   var cart = req.session.cart;
-
+  var total = 0;
   //Read the incoming product data
   var id = req.body.productId;
   if (!cart) {
@@ -36,7 +36,7 @@ router.post("/", function(req, res) {
         400
       );
     }
-
+    
     //Add or increase the product quantity in the shopping cart.
     if (cart[id]) {
       cart[id].qty++;
@@ -48,9 +48,11 @@ router.post("/", function(req, res) {
         qty: 1
       };
     }
-
+    for (var item in cart) {
+      total += cart[item].qty;
+    }
     //Display the cart for the user
-    res.status(201).json(cart);
+    res.status(201).json({items: cart, total: total});
   });
 });
 
@@ -60,7 +62,7 @@ router.get("/", function(req, res) {
   var cart = req.session.cart,
     displayCart = { items: [], total: 0 },
     total = 0;
-
+  console.log(req.session);
   if (!cart) {
     handleError(res, "Cart is empty", "Failed to get a cart.", 404);
   }
@@ -79,7 +81,6 @@ router.get("/", function(req, res) {
 //Delete all cart
 router.delete("/", function(req, res) {
   req.session.destroy();
-  res.redirect("./products/list");
 });
 
 //Delete a product form the cart by id
